@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:c="https://jakarta.ee/xml/ns/jakartaee"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Users</title>
+</head>
+
+<body>
+<div class="container text-center">
+    <div>
+        <h1>Welcome, <b>[[${#request.userPrincipal.principal.fullName}]]</b></h1>
+    </div>
+    <div>
+        <h2>Users list</h2>
+    </div>
+    <div>
+
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Email</th>
+                <th>Name</th>
+                <th>Surname</th>
+                <th>Birth</th>
+                <th>Roles</th>
+            </tr>
+            <tr th:each="user1 : ${listUsers}">
+                <td th:utext="${user1.id}"></td>
+                <td th:utext="${user1.email}"></td>
+                <td th:utext="${user1.username}"></td>
+                <td th:utext="${user1.surname}"></td>
+                <td th:utext="${user1.age}"></td>
+                <td th:utext="${user1.roles}"></td>
+                <td>
+                    <button th:onclick="'javascript:window.location.href=\'' + @{/updateInfo(userId=${user1.id})} + '\''">Edit</button>
+                    <button th:onclick="'javascript:window.location.href=\'' + @{/deleteUser(userId=${user1.id})} + '\''">Delete</button>
+                </td>
+            </tr>
+        </table>
+
+        <form th:action="@{/admin}" th:object="${user}" method="post">
+
+            <div th:switch="${user.id}">
+                <h3 th:case="${null}">Add new user:</h3>
+                <h3 th:case="*">Edit user data:</h3>
+            </div>
+
+            <input type="hidden" th:field="*{id}"/>
+
+            <table>
+                <tr>
+                    <td> Email </td>
+                    <td> <input th:field="*{email}"/> </td>
+                </tr>
+                <tr>
+                    <td> Name </td>
+                    <td> <input th:field="*{username}"/> </td>
+                </tr>
+                <tr>
+                    <td> Surname </td>
+                    <td> <input th:field="*{surname}"/> </td>
+                </tr>
+                <tr>
+                    <td> Birth </td>
+                    <td> <input th:field="*{age}"/> </td>
+                </tr>
+                <tr>
+                    <td> Password </td>
+                    <td> <input type="password" th:field="*{password}"  /> </td>
+                </tr>
+                <tr>
+                    <td> Roles </td>
+                    <td>
+                        <th:block th:each="role: ${listRoles}">
+                            <input type="checkbox" th:field="*{roles}"
+                                   th:text="${role.name}" th:value="${role.id}" class="m-2"/>
+                        </th:block>
+
+                    </td>
+                </tr>
+            </table>
+            <div th:switch="${user.id}">
+                <p th:case="${null}"><input type="submit" value="Add user"></p>
+                <p th:case="*"><input type="submit" value="Save"></p>
+            </div>
+        </form>
+    </div>
+</div>
+<table>
+    <tr>
+        <td>
+            <div th:switch="${isUser}">
+                <p th:case="${true}">
+                    <button th:onclick="'javascript:window.location.href=\'' + @{/user} + '\''">Goto user page</button>
+                </p>
+            </div>
+        </td>
+        <td>
+            <form th:action="@{/logout}" th:method="POST">
+                <input type="submit" value="Sign out"/>
+            </form>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

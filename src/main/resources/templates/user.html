@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:c="https://jakarta.ee/xml/ns/jakartaee"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Users</title>
+</head>
+<body>
+    <h1>Welcome, <b>[[${#request.userPrincipal.principal.fullName}]]</b></h1>
+    <h2>User data</h2>
+    <table>
+        <tr>
+            <td><b>ID </b></td>
+            <td th:text="${user.getId()}"/>
+        </tr>
+        <tr>
+            <td><b>Name </b></td>
+            <td th:text="${user.getUsername()}"/>
+        </tr>
+        <tr>
+            <td><b>Surname </b></td>
+            <td th:text="${user.getSurname()}"/>
+        </tr>
+        <tr>
+            <td><b>Age </b></td>
+            <td th:text="${user.getAge()}"/>
+        </tr>
+        <tr>
+            <td><b>E-mail </b></td>
+            <td th:text="${user.getEmail()}"/>
+        </tr>
+        <tr>
+            <td><b>Roles </b></td>
+            <td>
+                <th:block th:each="role : *{user.getRoles()}">
+                    &nbsp;<span th:text="${role.name}"/>
+                </th:block>
+            </td>
+        </tr>
+    </table>
+<br>
+<form th:action="@{/logout}" th:method="POST">
+    <input type="submit" value="Sign out"/>
+</form>
+</body>
+</html>
